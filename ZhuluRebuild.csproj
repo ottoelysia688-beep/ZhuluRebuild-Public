@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>ZhuluRebuild</AssemblyName>
+    <RootNamespace>ZhuluRebuild</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <!-- 游戏根目录: F:\Worldbox_v0.51.2\Worldbox_v0.51.2 (本工程位于 mods\ZhuluRebuild) -->
+  <ItemGroup>
+    <!-- 2026-10-24 大模型接入：运行时 Managed 目录已确认存在 System.Net.Http.dll（122KB），
+         指向游戏自带的那份，Private=False 避免打包冲突 -->
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\worldbox_Data\Managed\System.Net.Http.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\worldbox_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\worldbox_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\worldbox_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\worldbox_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\worldbox_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\worldbox_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>..\..\worldbox_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <!-- Newtonsoft.Json（WorldBox 内置，快照序列化用） -->
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\worldbox_Data\Managed\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <!-- NML 加载器（位于 StreamingAssets\mods，提供 BasicMod / WindowCreator / TabManager 等 API） -->
+    <Reference Include="NeoModLoader">
+      <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <!-- Harmony（BepInEx 内置） -->
+    <Reference Include="0Harmony">
+      <HintPath>..\..\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- SDK 默认编译当前项目 Scripts/**/*.cs；不要再链接游戏根目录副本，否则同一类型会编译两次。 -->
+
+  <!-- 排除 Development 开发测试代码进入正式构建 -->
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <Compile Remove="Scripts\Development\**" />
+  </ItemGroup>
+
+  <!-- Tests 目录归属独立测试工程（Tests\ZhuluRebuild.Tests.csproj），不进入 mod 本体 -->
+  <ItemGroup>
+    <Compile Remove="Tests\**" />
+  </ItemGroup>
+
+</Project>

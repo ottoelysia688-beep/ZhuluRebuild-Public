@@ -1,0 +1,115 @@
+{
+  "tiers": {
+    "zi": {
+      "name": "子国",
+      "minCities": 1,
+      "maxCities": 2,
+      "kingTitle": "子君",
+      "systemName": "宗族议事",
+      "systemDesc": "弹丸小邦，家国一体，宗族议事。",
+      "seats": ["prime_minister"],
+      "titles": {
+        "prime_minister": "家宰"
+      },
+      "titlesShort": {
+        "prime_minister": "家宰"
+      }
+    },
+    "bo": {
+      "name": "伯国",
+      "minCities": 3,
+      "maxCities": 5,
+      "kingTitle": "伯君",
+      "systemName": "大夫辅政",
+      "systemDesc": "大夫辅政，三卿共治。",
+      "seats": ["prime_minister", "revenue", "military"],
+      "titles": {
+        "prime_minister": "上大夫",
+        "revenue": "司徒",
+        "military": "司马"
+      },
+      "titlesShort": {
+        "prime_minister": "上大夫",
+        "revenue": "司徒",
+        "military": "司马"
+      }
+    },
+    "hou": {
+      "name": "侯国",
+      "minCities": 6,
+      "maxCities": 11,
+      "kingTitle": "侯王",
+      "systemName": "朝议制度",
+      "systemDesc": "朝议制度，五卿分职。",
+      "seats": ["prime_minister", "personnel", "revenue", "military", "justice"],
+      "titles": {
+        "prime_minister": "相邦",
+        "personnel": "司徒",
+        "revenue": "司空",
+        "military": "司马",
+        "justice": "司寇"
+      },
+      "titlesShort": {
+        "prime_minister": "相邦",
+        "personnel": "司徒",
+        "revenue": "司空",
+        "military": "司马",
+        "justice": "司寇"
+      }
+    },
+    "gong": {
+      "name": "公国",
+      "minCities": 12,
+      "maxCities": 999,
+      "kingTitle": "公王",
+      "systemName": "三公制衡",
+      "systemDesc": "丞相开府，六部分理，三公制衡。",
+      "seats": ["prime_minister", "personnel", "revenue", "rites", "military", "justice", "works"],
+      "titles": {
+        "prime_minister": "丞相",
+        "personnel": "吏部尚书",
+        "revenue": "户部尚书",
+        "rites": "礼部尚书",
+        "military": "兵部尚书",
+        "justice": "刑部尚书",
+        "works": "工部尚书"
+      },
+      "titlesShort": {
+        "prime_minister": "丞相",
+        "personnel": "吏部",
+        "revenue": "户部",
+        "rites": "礼部",
+        "military": "兵部",
+        "justice": "刑部",
+        "works": "工部"
+      }
+    },
+    "tianming": {
+      "name": "天命国",
+      "minCities": 1,
+      "maxCities": 999,
+      "kingTitle": "皇帝",
+      "systemName": "天子临朝",
+      "systemDesc": "天子临朝，万邦来朝。",
+      "seats": ["prime_minister", "personnel", "revenue", "rites", "military", "justice", "works"],
+      "titles": {
+        "prime_minister": "丞相",
+        "personnel": "吏部尚书",
+        "revenue": "户部尚书",
+        "rites": "礼部尚书",
+        "military": "兵部尚书",
+        "justice": "刑部尚书",
+        "works": "工部尚书"
+      },
+      "titlesShort": {
+        "prime_minister": "丞相",
+        "personnel": "吏部",
+        "revenue": "户部",
+        "rites": "礼部",
+        "military": "兵部",
+        "justice": "刑部",
+        "works": "工部"
+      }
+    }
+  }
+}

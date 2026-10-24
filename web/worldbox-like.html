@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方块上帝 · WorldBox-like 单文件版</title>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body { background:#0d1117; color:#e6edf3; font-family:"Microsoft YaHei",system-ui,sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+  header { display:flex; align-items:center; gap:10px; padding:8px 12px; background:#161b22; border-bottom:1px solid #30363d; flex-wrap:wrap; }
+  header h1 { font-size:16px; white-space:nowrap; }
+  header h1 span { color:#7ee787; }
+  .stats { display:flex; gap:12px; font-size:13px; color:#9fb3c8; flex-wrap:wrap; }
+  .stats b { color:#fff; }
+  .controls { margin-left:auto; display:flex; gap:6px; flex-wrap:wrap; }
+  button { background:#21262d; color:#e6edf3; border:1px solid #30363d; border-radius:6px; padding:5px 10px; cursor:pointer; font-size:12px; }
+  button:hover { background:#30363d; }
+  button.active { background:#1f6feb; border-color:#1f6feb; color:#fff; }
+  button.danger { border-color:#7a2e2e; }
+  #main { flex:1; display:flex; min-height:0; }
+  #toolbar { width:148px; background:#161b22; border-right:1px solid #30363d; padding:8px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; }
+  #toolbar h3 { font-size:12px; color:#8b949e; margin-top:6px; }
+  #toolbar button { text-align:left; font-size:12px; }
+  #toolbar .row { display:flex; gap:4px; }
+  #toolbar .row button { flex:1; text-align:center; }
+  #stage { flex:1; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 30%, #16202e 0%, #0d1117 70%); position:relative; min-width:0; }
+  #game { image-rendering:pixelated; border:2px solid #30363d; border-radius:8px; cursor:crosshair; box-shadow:0 8px 40px rgba(0,0,0,.5); }
+  #side { width:280px; background:#161b22; border-left:1px solid #30363d; display:flex; flex-direction:column; min-height:0; }
+  #inspect { padding:10px; border-bottom:1px solid #30363d; font-size:12px; min-height:110px; }
+  #inspect h3, #logWrap h3 { font-size:12px; color:#8b949e; margin-bottom:6px; }
+  #logWrap { flex:1; display:flex; flex-direction:column; min-height:0; padding:10px; }
+  #log { flex:1; overflow-y:auto; font-size:12px; display:flex; flex-direction:column; gap:4px; }
+  #log div { background:#0d1117; border:1px solid #21262d; padding:4px 6px; border-radius:6px; }
+  #log .good { border-color:#1a5c2e; } #log .bad { border-color:#7a2e2e; } #log .king { border-color:#9e6a03; }
+  #hint { padding:8px 10px; font-size:11px; color:#8b949e; border-top:1px solid #30363d; }
+  @media (max-width:900px){ #toolbar{width:120px} #side{display:none} }
+</style>
+</head>
+<body>
+<header>
+  <h1>方块上帝 <span>· WorldBox-like</span></h1>
+  <div class="stats">
+    <span>天数 <b id="stDay">0</b></span>
+    <span>人口 <b id="stPop">0</b></span>
+    <span>村庄 <b id="stVil">0</b></span>
+    <span>动物 <b id="stAni">0</b></span>
+    <span>王朝 <b id="stDyn">无</b></span>
+    <span>FPS <b id="stFps">-</b></span>
+  </div>
+  <div class="controls">
+    <button id="btnPause">⏸ 暂停</button>
+    <button id="btnS1" class="active">1x</button>
+    <button id="btnS2">2x</button>
+    <button id="btnS4">4x</button>
+    <button id="btnNew" class="danger">⛰ 新世界</button>
+    <button id="btnSave">💾 存档</button>
+    <button id="btnLoad">📂 读档</button>
+    <button id="btnShot">📷 截图</button>
+  </div>
+</header>
+<div id="main">
+  <div id="toolbar">
+    <h3>🔍 查看</h3>
+    <button data-tool="inspect" class="active">🔍 检查</button>
+    <h3>⛰ 地形笔刷</h3>
+    <button data-tool="paint-water">🌊 海水</button>
+    <button data-tool="paint-sand">🏖 沙滩</button>
+    <button data-tool="paint-grass">🌱 草地</button>
+    <button data-tool="paint-forest">🌲 森林</button>
+    <button data-tool="paint-mountain">⛰ 高山</button>
+    <button data-tool="paint-magma">🌋 岩浆</button>
+    <h3>🐾 生命</h3>
+    <button data-tool="life-human">🧍 放人</button>
+    <button data-tool="life-village">🏠 建村</button>
+    <button data-tool="life-sheep">🐑 羊</button>
+    <button data-tool="life-chicken">🐔 鸡</button>
+    <button data-tool="life-wolf">🐺 狼</button>
+    <button data-tool="life-tree">🌳 种树</button>
+    <h3>⚡ 神力灾难</h3>
+    <button data-tool="power-rain">🌧 降雨</button>
+    <button data-tool="power-drought">🏜 干旱</button>
+    <button data-tool="power-lightning">⚡ 闪电</button>
+    <button data-tool="power-quake">🌐 地震</button>
+    <button data-tool="power-plague">☣ 瘟疫</button>
+    <button data-tool="power-fire">🔥 烈火</button>
+    <button data-tool="power-cure">💊 净化</button>
+    <h3>🖌 笔刷</h3>
+    <div class="row">
+      <button data-brush="1">1</button>
+      <button data-brush="3" class="active">3</button>
+      <button data-brush="6">6</button>
+      <button data-brush="10">10</button>
+    </div>
+    <h3>📦 存档</h3>
+    <button id="btnExport">⬇ 导出JSON</button>
+    <button id="btnImport">⬆ 导入JSON</button>
+    <input type="file" id="fileImport" accept=".json" style="display:none">
+    <button id="btnClearLife" class="danger">🧹 清除生命</button>
+  </div>
+  <div id="stage">
+    <canvas id="game" width="512" height="512" style="width:min(72vh,72vw);height:min(72vh,72vw)"></canvas>
+  </div>
+  <div id="side">
+    <div id="inspect"><h3>🔍 检查器（点地图）</h3><div id="inspectBody">选择检查工具，点击地图查看地块 / 村庄 / 人口。</div></div>
+    <div id="logWrap"><h3>📜 史书 / 播报</h3><div id="log"></div></div>
+    <div id="hint">左键拖拽涂抹 · 闪电/地震点按释放 · 2x/4x加速看文明演化 · 存档在 localStorage，换电脑请导出JSON。</div>
+  </div>
+</div>
+<script>
+"use strict";
+/* ============ 基础常量 ============ */
+const W = 128, H = 128, N = W*H;
+const TP = 4; // 每tile像素
+const T_DEEP=0, T_SHALLOW=1, T_SAND=2, T_GRASS=3, T_FOREST=4, T_MOUNT=5, T_MAGMA=6;
+const TNAME = ["深海","浅海","沙滩","草地","森林","高山","岩浆"];
+const DAY_LEN = 300;
+const SAVE_KEY = "wb_like_save_v1";
+
+let terrain = new Uint8Array(N);
+let moist = new Uint8Array(N);
+let fireArr = new Uint8Array(N);
+let entities = [];   // {t,x,y,hp,age,food,vil,sick,tx,ty,cool,maxAge}
+let villages = [];   // {id,name,x,y,r,food,wood,leader,culture,color,dead}
+let dynasty = null;   // {name,holderVil,emperor,era,mandate}
+let wars = {};        // "a_b" -> {a,b,rel,atWar}
+let nextVilId = 1, nextEntId = 1;
+let day = 0, tick = 0, speed = 1, paused = false;
+let tool = "inspect", brush = 3;
+let terrainDirty = true;
+let mouseTile = null;
+
+/* ============ 名字库 ============ */
+const SURN = ["姬","姜","嬴","刘","李","赵","王","陈","杨","孙","吴","郑","桓","慕容","拓跋","耶律","孛儿只斤"];
+const GIVEN = ["安","靖","珩","瑾","昭","昀","曜","衡","恪","承","衍","昭武","天赐","长生","铁木","忽答"];
+const VIL_PRE = ["长安","洛阳","临淄","蓟城","邺城","姑臧","建康","成都","大都","上京","穹庐","狼居胥","祁连","云中"];
+const VIL_SUF = ["村","镇","城","寨","堡","帐"];
+const ERA = ["开皇","贞观","开元","天授","洪武","永乐","嘉靖","天命","长生天眷","穹庐大兴"];
+const DYNASTY_SUF = ["朝","国","汗国"];
+function pick(a){ return a[(Math.random()*a.length)|0]; }
+function cname(){ return pick(SURN)+pick(GIVEN); }
+function vname(){ return pick(VIL_PRE)+pick(VIL_SUF); }
+
+/* ============ 噪声地形 ============ */
+let seed = (Math.random()*1e9)|0;
+function hash2(x,y){ let h = x*374761393 + y*668265263 + seed*974634; h = (h ^ (h>>13))*1274126177; return ((h ^ (h>>16))>>>0)/4294967295; }
+function smooth(t){ return t*t*(3-2*t); }
+function vnoise(x,y){
+  const xi=Math.floor(x), yi=Math.floor(y), xf=x-xi, yf=y-yi;
+  const a=hash2(xi,yi), b=hash2(xi+1,yi), c=hash2(xi,yi+1), d=hash2(xi+1,yi+1);
+  const u=smooth(xf), v=smooth(yf);
+  return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v;
+}
+function fbm(x,y){ return vnoise(x,y)*0.6 + vnoise(x*2.1+7,y*2.1+3)*0.3 + vnoise(x*4.3+13,y*4.3+29)*0.1; }
+const idx = (x,y)=> y*W+x;
+const inMap = (x,y)=> x>=0 && y>=0 && x<W && y<H;
+
+function genWorld(){
+  seed = (Math.random()*1e9)|0;
+  entities = []; villages = []; dynasty = null; wars = {};
+  nextVilId = 1; day = 0; tick = 0;
+  fireArr = new Uint8Array(N);
+  const cx=W/2, cy=H/2, maxD=Math.sqrt(cx*cx+cy*cy);
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+    const i=idx(x,y);
+    const n=fbm(x/22, y/22);
+    const m=fbm(x/16+99, y/16+55);
+    const d=Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy))/maxD;
+    const h=n - d*0.35 + 0.08;
+    moist[i]=(m*100)|0;
+    let t;
+    if(h<0.30) t=T_DEEP;
+    else if(h<0.38) t=T_SHALLOW;
+    else if(h<0.43) t=T_SAND;
+    else if(h<0.66) t=(m>0.62?T_FOREST:T_GRASS);
+    else if(h<0.80) t=(m>0.5?T_FOREST:T_GRASS);
+    else t=T_MOUNT;
+    terrain[i]=t;
+  }
+  // 初始播撒
+  scatterTrees(320); scatterAnimal("sheep",28); scatterAnimal("chicken",18); scatterAnimal("wolf",8);
+  // 初始3村，尽量分散
+  const spots=[[34,40],[92,44],[64,90]];
+  for(const [sx,sy] of spots){ const p=findLand(sx,sy); if(p) foundVillage(p.x,p.y,true); }
+  terrainDirty = true;
+  log("🌍 新世界诞生，"+villages.length+"个聚落开始繁衍。","good");
+}
+function findLand(sx,sy){
+  for(let r=0;r<24;r++) for(let a=0;a<16;a++){
+    const x=Math.round(sx+Math.cos(a/16*6.283)*r), y=Math.round(sy+Math.sin(a/16*6.283)*r);
+    if(inMap(x,y) && (terrain[idx(x,y)]===T_GRASS||terrain[idx(x,y)]===T_FOREST)) return {x,y};
+  }
+  return null;
+}
+function walkable(x,y,isHuman){
+  if(!inMap(x,y)) return false;
+  const t=terrain[idx(x,y)];
+  if(t===T_DEEP||t===T_SHALLOW||t===T_MAGMA) return false;
+  if(!isHuman && t===T_MOUNT) return false;
+  return true;
+}
+
+/* ============ 播报 ============ */
+const logEl = document.getElementById("log");
+function log(msg, cls){
+  const d=document.createElement("div"); if(cls) d.className=cls;
+  d.textContent="D"+day+" · "+msg;
+  logEl.prepend(d);
+  while(logEl.children.length>60) logEl.lastChild.remove();
+}
+
+/* ============ 实体/村庄 ============ */
+function addEntity(t,x,y,vil){
+  if(entities.length>1500) return null;
+  const maxAge = t==="human"?900+Math.random()*400 : t==="tree"?1200 : 500+Math.random()*300;
+  const e={id:nextEntId++,t,x,y,hp:t==="tree"?30:(t==="wolf"?60:40),age:0,food:20,vil:(vil==null?-1:vil),sick:0,tx:x,ty:y,cool:0,maxAge};
+  entities.push(e); return e;
+}
+function scatterTrees(n){ for(let k=0;k<n;k++){ const x=(Math.random()*W)|0,y=(Math.random()*H)|0; const t=terrain[idx(x,y)]; if(t===T_GRASS||t===T_FOREST) addEntity("tree",x+0.5,y+0.5,-1); } }
+function scatterAnimal(t,n){ for(let k=0;k<n;k++){ const x=(Math.random()*W)|0,y=(Math.random()*H)|0; if(walkable(x,y,false)) addEntity(t,x+0.5,y+0.5,-1); } }
+const VIL_COLORS=["#e5484d","#3e9b4f","#0090ff","#f5a524","#8e4ec6","#12a594"];
+function foundVillage(x,y,quiet){
+  const v={id:nextVilId++,name:vname(),x,y,r:6,food:40,wood:20,leader:cname(),culture:Math.random()<0.75?"中原":"游牧",color:VIL_COLORS[(nextVilId-1)%VIL_COLORS.length],dead:false};
+  villages.push(v);
+  for(let k=0;k<8;k++) addEntity("human",x+(Math.random()*6-3),y+(Math.random()*6-3),v.id);
+  addEntity("tree",x+1,y+1,-1);
+  if(!quiet) log("🏠 "+v.leader+" 在 "+v.name+" 聚众建村（"+v.culture+"）。","good");
+  return v;
+}
+function vilPop(id){ let c=0; for(const e of entities) if(e.t==="human"&&e.vil===id) c++; return c; }
+function aliveVils(){ return villages.filter(v=>!v.dead); }
+
+/* ============ 笔刷/神力 ============ */
+function paintCircle(cx,cy,r,fn){
+  for(let y=Math.floor(cy-r);y<=cy+r;y++) for(let x=Math.floor(cx-r);x<=cx+r;x++){
+    if(!inMap(x,y)) continue;
+    const dx=x-cx,dy=y-cy; if(dx*dx+dy*dy>r*r) continue;
+    fn(x,y,idx(x,y));
+  }
+  terrainDirty=true;
+}
+function applyTool(tx,ty){
+  if(tx==null) return;
+  if(tool.startsWith("paint-")){
+    const map={"paint-water":T_DEEP,"paint-sand":T_SAND,"paint-grass":T_GRASS,"paint-forest":T_FOREST,"paint-mountain":T_MOUNT,"paint-magma":T_MAGMA};
+    const t=map[tool];
+    paintCircle(tx,ty,brush,(x,y,i)=>{ terrain[i]=t; if(t===T_MAGMA){fireArr[i]=0;} if(t===T_DEEP||t===T_SHALLOW){fireArr[i]=0;} if(t===T_GRASS&&moist[i]<20)moist[i]=50; });
+  } else if(tool.startsWith("life-")){
+    const kind=tool.slice(5);
+    if(kind==="village"){ const p=findLand(tx,ty)||{x:tx,y:ty}; if(walkable(p.x,p.y,true)) foundVillage(p.x,p.y,false); }
+    else if(kind==="tree"){ paintCircle(tx,ty,brush,(x,y)=>{ if(terrain[idx(x,y)]===T_GRASS||terrain[idx(x,y)]===T_FOREST) addEntity("tree",x+0.5,y+0.5,-1); }); }
+    else { paintCircle(tx,ty,brush,(x,y)=>{ if(walkable(x,y,true)) addEntity(kind,x+Math.random(),y+Math.random(),-1); }); }
+  } else if(tool.startsWith("power-")){
+    const kind=tool.slice(6);
+    if(kind==="rain"){ paintCircle(tx,ty,brush+3,(x,y,i)=>{ moist[i]=Math.min(100,moist[i]+30); if(fireArr[i]>0)fireArr[i]=0; if(terrain[i]===T_SAND&&Math.random()<0.05)terrain[i]=T_GRASS; }); }
+    else if(kind==="drought"){ paintCircle(tx,ty,brush+3,(x,y,i)=>{ moist[i]=Math.max(0,moist[i]-40); if((terrain[i]===T_GRASS||terrain[i]===T_FOREST)&&moist[i]<12&&Math.random()<0.06)fireArr[i]=8; }); }
+    else if(kind==="lightning"){ lightning(tx,ty); }
+    else if(kind==="quake"){ earthquake(tx,ty); }
+    else if(kind==="plague"){ paintCircle(tx,ty,brush,(x,y)=>{ for(const e of entities){ if(e.t!=="tree"&&Math.abs(e.x-x)<1&&Math.abs(e.y-y)<1&&Math.random()<0.6)e.sick=120; } }); log("☣ 瘟疫在 ("+tx+","+ty+") 附近蔓延！","bad"); }
+    else if(kind==="fire"){ paintCircle(tx,ty,brush,(x,y,i)=>{ const t=terrain[i]; if(t===T_GRASS||t===T_FOREST||t===T_SAND)fireArr[i]=10; }); }
+    else if(kind==="cure"){ paintCircle(tx,ty,brush+2,(x,y,i)=>{ fireArr[i]=0; for(const e of entities){ if(Math.abs(e.x-x)<1.5&&Math.abs(e.y-y)<1.5)e.sick=0; } if(terrain[i]===T_MAGMA)terrain[i]=T_MOUNT; }); }
+  } else if(tool==="inspect"){ showInspect(tx,ty); }
+}
+function lightning(tx,ty){
+  paintCircle(tx,ty,2,(x,y,i)=>{ fireArr[i]= (terrain[i]===T_GRASS||terrain[i]===T_FOREST)?12:fireArr[i]; });
+  for(const e of entities){ const d=Math.hypot(e.x-tx,e.y-ty); if(d<2.5){ e.hp-=50; if(e.t==="tree")fireArr[idx(Math.floor(e.x),Math.floor(e.y))|0]=10; } }
+  if(Math.random()<0.3){ paintCircle(tx,ty,1,(x,y,i)=>{ if(terrain[i]===T_GRASS)terrain[i]=T_SAND; }); }
+}
+function earthquake(tx,ty){
+  paintCircle(tx,ty,8,(x,y,i)=>{
+    const r=Math.random();
+    if(r<0.08&&terrain[i]!==T_DEEP)terrain[i]=T_MOUNT;
+    else if(r<0.14&&terrain[i]!==T_DEEP&&terrain[i]!==T_SHALLOW)terrain[i]=T_SAND;
+  });
+  for(const e of entities){ if(Math.hypot(e.x-tx,e.y-ty)<8&&Math.random()<0.4)e.hp-=40; }
+  for(const v of aliveVils()){ if(Math.hypot(v.x-tx,v.y-ty)<9){ v.food=Math.max(0,v.food-15); if(Math.random()<0.5)log("🌐 地震波及 "+v.name+"，存粮受损！","bad"); } }
+}
+
+/* ============ 模拟 ============ */
+function simTick(){
+  tick++;
+  // --- 实体 ---
+  for(let i=entities.length-1;i>=0;i--){
+    const e=entities[i];
+    e.age++;
+    if(e.t==="tree"){
+      if(e.age>e.maxAge||e.hp<=0){ entities.splice(i,1); continue; }
+      if(tick%50===0&&Math.random()<0.02&&entities.length<1500){
+        const nx=e.x+(Math.random()*6-3), ny=e.y+(Math.random()*6-3);
+        if(inMap(nx|0,ny|0)){ const t=terrain[idx(nx|0,ny|0)]; if(t===T_GRASS||t===T_FOREST)addEntity("tree",nx,ny,-1); }
+      }
+      const fi=inMap(e.x|0,e.y|0)?fireArr[idx(e.x|0,e.y|0)]:0;
+      if(fi>0){ e.hp-=2; }
+      continue;
+    }
+    // 非树：移动
+    e.cool--;
+    const xi=Math.floor(e.x), yi=Math.floor(e.y);
+    const onFire = inMap(xi,yi)?fireArr[idx(xi,yi)]:0;
+    if(onFire>0) e.hp-=3;
+    if(e.sick>0){ e.sick--; e.hp-=0.25; if(Math.random()<0.002&&entities.length<1500){ for(const o of entities){ if(o!==e&&o.t!=="tree"&&Math.hypot(o.x-e.x,o.y-e.y)<1.2&&Math.random()<0.3){o.sick=120;break;} } } }
+    if(e.hp<=0||e.age>e.maxAge){ entities.splice(i,1); continue; }
+    // 饥饿
+    e.food-=0.03;
+    if(e.food<=0){ e.hp-=0.3; e.food=0; }
+    // 目标
+    if(e.cool<=0||Math.hypot(e.tx-e.x,e.ty-e.y)<0.4){
+      if(e.t==="wolf"){
+        let best=null,bd=9;
+        for(const o of entities){ if((o.t==="sheep"||o.t==="chicken"||o.t==="human")&&o.hp>0){ const d=Math.hypot(o.x-e.x,o.y-e.y); if(d<bd){bd=d;best=o;} } }
+        if(best){e.tx=best.x;e.ty=best.y;} else {e.tx=e.x+Math.random()*8-4;e.ty=e.y+Math.random()*8-4;}
+      } else if(e.t==="human"){
+        const v=villages.find(v=>v.id===e.vil&&!v.dead);
+        if(v&&Math.hypot(v.x-e.x,v.y-e.y)>v.r+6){ e.tx=v.x+Math.random()*8-4; e.ty=v.y+Math.random()*8-4; }
+        else { e.tx=e.x+Math.random()*10-5; e.ty=e.y+Math.random()*10-5; }
+      } else { e.tx=e.x+Math.random()*8-4; e.ty=e.y+Math.random()*8-4; }
+      e.cool=20+Math.random()*40;
+    }
+    const dx=e.tx-e.x, dy=e.ty-e.y, d=Math.hypot(dx,dy)||1;
+    const sp=e.t==="wolf"?0.22:(e.t==="human"?0.16:0.14);
+    const nx=e.x+dx/d*sp, ny=e.y+dy/d*sp;
+    if(walkable(Math.floor(nx),Math.floor(ny),e.t==="human")){ e.x=nx; e.y=ny; }
+    else { e.cool=0; }
+    // 进食/战斗
+    if(e.t==="human"){
+      const ti=inMap(e.x|0,e.y|0)?idx(e.x|0,e.y|0):-1;
+      if(ti>=0&&(terrain[ti]===T_FOREST)&&Math.random()<0.02){ e.food=Math.min(60,e.food+15); if(Math.random()<0.2){ for(let k=entities.length-1;k>=0;k--){ const o=entities[k]; if(o.t==="tree"&&Math.hypot(o.x-e.x,o.y-e.y)<1.5){entities.splice(k,1);break;} } } }
+      else if(Math.random()<0.005) e.food=Math.min(60,e.food+5);
+      // 繁殖
+      if(e.age>100&&e.food>40&&Math.random()<0.004&&entities.length<1500){
+        for(const o of entities){ if(o!==e&&o.t==="human"&&Math.hypot(o.x-e.x,o.y-e.y)<1.5&&o.food>30){ addEntity("human",e.x,e.y,e.vil); e.food-=15; o.food-=10; break; } }
+      }
+    } else if(e.t==="sheep"||e.t==="chicken"){
+      const ti=inMap(e.x|0,e.y|0)?idx(e.x|0,e.y|0):-1;
+      if(ti>=0&&(terrain[ti]===T_GRASS||terrain[ti]===T_FOREST)&&Math.random()<0.03)e.food=Math.min(50,e.food+10);
+      if(e.age>120&&e.food>30&&Math.random()<0.006){
+        for(const o of entities){ if(o!==e&&o.t===e.t&&Math.hypot(o.x-e.x,o.y-e.y)<1.5){ addEntity(e.t,e.x,e.y,-1); e.food-=12; break; } }
+      }
+    } else if(e.t==="wolf"){
+      for(let k=entities.length-1;k>=0;k--){
+        const o=entities[k];
+        if(o!==e&&(o.t==="sheep"||o.t==="chicken"||o.t==="human")&&Math.hypot(o.x-e.x,o.y-e.y)<0.7){
+          o.hp-=25; e.food=Math.min(60,e.food+20);
+          if(o.hp<=0)entities.splice(k,1);
+          break;
+        }
+      }
+      if(e.age>150&&e.food>35&&Math.random()<0.003){ addEntity("wolf",e.x,e.y,-1); e.food-=15; }
+    }
+  }
+  // --- 地形/火 每10tick ---
+  if(tick%10===0){
+    for(let k=0;k<200;k++){
+      const x=(Math.random()*W)|0,y=(Math.random()*H)|0,i=idx(x,y);
+      if(fireArr[i]>0){
+        fireArr[i]--;
+        if(terrain[i]===T_FOREST&&Math.random()<0.1)terrain[i]=T_GRASS;
+        else if(terrain[i]===T_GRASS&&Math.random()<0.05)terrain[i]=T_SAND;
+        if(Math.random()<0.15){ const nx=x+((Math.random()*3)|0)-1, ny=y+((Math.random()*3)|0)-1; if(inMap(nx,ny)){ const ni=idx(nx,ny); if((terrain[ni]===T_FOREST||terrain[ni]===T_GRASS)&&fireArr[ni]===0&&moist[ni]<60)fireArr[ni]=8; } }
+        terrainDirty=true;
+      } else if(terrain[i]===T_MAGMA){
+        if(Math.random()<0.03){ const nx=x+((Math.random()*3)|0)-1, ny=y+((Math.random()*3)|0)-1; if(inMap(nx,ny)){ const ni=idx(nx,ny); if(terrain[ni]!==T_DEEP&&fireArr[ni]===0&&(terrain[ni]===T_GRASS||terrain[ni]===T_FOREST))fireArr[ni]=6; } }
+      } else if(terrain[i]===T_GRASS&&moist[i]>55&&Math.random()<0.02){ terrain[i]=T_FOREST; terrainDirty=true; }
+      else if(terrain[i]===T_SAND&&moist[i]>60&&Math.random()<0.02){ terrain[i]=T_GRASS; terrainDirty=true; }
+    }
+  }
+  // --- 每天 ---
+  if(tick%DAY_LEN===0){ newDay(); }
+}
+function newDay(){
+  day++;
+  // 村庄经济
+  for(const v of aliveVils()){
+    const pop=vilPop(v.id);
+    v.food+=6+pop*0.35;
+    v.wood+=3+pop*0.12;
+    v.food-=pop*0.7;
+    if(v.r<14&&pop>v.r*3)v.r+=0.3;
+    if(v.food<0){ v.food=0;
+      // 饿死最弱
+      let victim=null;
+      for(const e of entities) if(e.t==="human"&&e.vil===v.id){ if(!victim||e.hp<victim.hp)victim=e; }
+      if(victim){ victim.hp=0; }
+      if(Math.random()<0.5)log("🫘 "+v.name+" 闹饥荒，饿殍遍野！","bad");
+    } else if(v.food>25&&pop<70){
+      for(let k=0;k<2;k++){ addEntity("human",v.x+Math.random()*6-3,v.y+Math.random()*6-3,v.id); }
+      v.food-=12;
+    }
+    if(pop===0&&v.food<=0){ v.dead=true; log("💀 "+v.name+" 人口断绝，成为废墟。","bad"); }
+  }
+  // 外交/战争
+  const alive=aliveVils();
+  for(let a=0;a<alive.length;a++) for(let b=a+1;b<alive.length;b++){
+    const A=alive[a],B=alive[b];
+    const key=A.id<B.id?A.id+"_"+B.id:B.id+"_"+A.id;
+    if(!wars[key])wars[key]={a:A.id,b:B.id,rel:0,atWar:false};
+    const w=wars[key];
+    const dist=Math.hypot(A.x-B.x,A.y-B.y);
+    if(dist<40){
+      const pa=vilPop(A.id),pb=vilPop(B.id);
+      w.rel-=((pa>18&&pb>18)?4:1);
+      if(!w.atWar&&w.rel<-50){ w.atWar=true; log("⚔ "+A.name+" 与 "+B.name+" 开战！","bad"); }
+      if(w.atWar){
+        // 互耗
+        for(let k=0;k<3;k++){
+          const ea=entities.find(e=>e.t==="human"&&e.vil===A.id), eb=entities.find(e=>e.t==="human"&&e.vil===B.id);
+          if(ea&&Math.random()<0.7)ea.hp-=30;
+          if(eb&&Math.random()<0.7)eb.hp-=30;
+        }
+        // 灭村判定
+        const na=vilPop(A.id),nb=vilPop(B.id);
+        if(na<4||nb<4){
+          const win=na>=nb?A:B, lose=na>=nb?B:A;
+          lose.dead=true; w.atWar=false;
+          win.food+=30;
+          log("🏴 "+win.name+" 灭 "+lose.name+"，俘其余众！"+win.leader+" 声威大振。","king");
+        }
+      }
+    } else if(w.rel<0) w.rel+=1;
+  }
+  updateDynasty();
+  terrainDirty=true;
+}
+function updateDynasty(){
+  const alive=aliveVils().filter(v=>v.culture==="中原");
+  alive.sort((a,b)=>vilPop(b.id)-vilPop(a.id));
+  const top=alive[0], topPop=top?vilPop(top.id):0;
+  if(!dynasty){
+    if(top&&topPop>=25){
+      const era=pick(ERA);
+      dynasty={name:top.name+pick(DYNASTY_SUF),holderVil:top.id,emperor:top.leader,era,mandate:80};
+      log("👑 "+dynasty.emperor+" 统一诸部，建立【"+dynasty.name+"】，改元"+era+"！天命所归。","king");
+    }
+  } else {
+    const holder=villages.find(v=>v.id===dynasty.holderVil);
+    const holderAlive=holder&&!holder.dead, holderPop=holderAlive?vilPop(holder.id):0;
+    if(!holderAlive||holderPop<8){
+      log("📉 【"+dynasty.name+"】气数已尽，"+dynasty.emperor+" 黯然退位。","bad");
+      dynasty=null; updateDynasty(); return;
+    }
+    dynasty.mandate=Math.max(0,Math.min(100,dynasty.mandate+(holderPop>20?1:-2)));
+    if(top&&top.id!==holder.id&&topPop>holderPop+15){
+      log("📉 【"+dynasty.name+"】衰微，"+top.leader+" 以"+top.name+" 代之，改朝换代！","king");
+      dynasty={name:top.name+pick(DYNASTY_SUF),holderVil:top.id,emperor:top.leader,era:pick(ERA),mandate:75};
+      log("👑 "+dynasty.emperor+" 登基，建立【"+dynasty.name+"】，改元"+dynasty.era+"！","king");
+    }
+  }
+}
+
+/* ============ 渲染 ============ */
+const canvas=document.getElementById("game"), ctx=canvas.getContext("2d");
+const terrCanvas=document.createElement("canvas"); terrCanvas.width=W; terrCanvas.height=H;
+const terrCtx=terrCanvas.getContext("2d");
+function terrBase(t){
+  switch(t){
+    case T_DEEP:return [16,54,110]; case T_SHALLOW:return [38,110,170];
+    case T_SAND:return [219,203,147]; case T_GRASS:return [86,168,94];
+    case T_FOREST:return [46,125,66]; case T_MOUNT:return [139,141,145];
+    case T_MAGMA:return [200,60,20]; default:return [0,0,0];
+  }
+}
+function redrawTerrain(){
+  const img=terrCtx.createImageData(W,H);
+  for(let i=0;i<N;i++){
+    const b=terrBase(terrain[i]);
+    const v=(hash2(i%W,(i/W)|0)*24-12)|0;
+    img.data[i*4]=Math.max(0,Math.min(255,b[0]+v));
+    img.data[i*4+1]=Math.max(0,Math.min(255,b[1]+v));
+    img.data[i*4+2]=Math.max(0,Math.min(255,b[2]+v));
+    img.data[i*4+3]=255;
+  }
+  terrCtx.putImageData(img,0,0);
+  terrainDirty=false;
+}
+function draw(){
+  if(terrainDirty)redrawTerrain();
+  ctx.imageSmoothingEnabled=false;
+  ctx.drawImage(terrCanvas,0,0,canvas.width,canvas.height);
+  const s=canvas.width/W;
+  // 火
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){ const f=fireArr[idx(x,y)]; if(f>0){ ctx.fillStyle=(tick>>3)%2?"#ff7b00":"#ff2e00"; ctx.fillRect(x*s,y*s,s,s); } }
+  // 村庄领地+房屋
+  for(const v of aliveVils()){
+    ctx.strokeStyle=v.color; ctx.globalAlpha=0.5; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(v.x*s,v.y*s,v.r*s,0,6.283); ctx.stroke(); ctx.globalAlpha=1;
+    const pop=vilPop(v.id);
+    const houses=Math.min(10,1+(pop/6|0));
+    ctx.fillStyle="#5b3a1e";
+    for(let k=0;k<houses;k++){
+      const a=k/houses*6.283, hx=(v.x+Math.cos(a)*2.5)*s, hy=(v.y+Math.sin(a)*2.5)*s;
+      ctx.fillRect(hx,hy,s*1.4,s*1.4);
+    }
+    ctx.fillStyle="#fff"; ctx.font="10px sans-serif";
+    ctx.fillText(v.name+"("+pop+")", v.x*s+6, v.y*s-6);
+    if(dynasty&&dynasty.holderVil===v.id){ ctx.fillText("👑", v.x*s-12, v.y*s-6); }
+  }
+  // 实体
+  for(const e of entities){
+    const px=e.x*s, py=e.y*s;
+    if(e.t==="tree"){ ctx.fillStyle="#1d5c2e"; ctx.fillRect(px-1,py-2,3,4); ctx.fillStyle="#2f9e44"; ctx.fillRect(px-2,py-4,5,3); }
+    else if(e.t==="human"){ const v=villages.find(v=>v.id===e.vil); ctx.fillStyle=v&&!v.dead?v.color:"#ced4da"; ctx.fillRect(px-1,py-2,3,4); ctx.fillStyle="#ffd8a8"; ctx.fillRect(px-1,py-3,3,2); if(e.sick>0){ctx.fillStyle="#b197fc";ctx.fillRect(px-1,py-4,3,1);} }
+    else if(e.t==="sheep"){ ctx.fillStyle="#f8f9fa"; ctx.fillRect(px-1,py-1,3,2); ctx.fillStyle="#343a40"; ctx.fillRect(px+1,py-1,1,1); }
+    else if(e.t==="chicken"){ ctx.fillStyle="#ffd43b"; ctx.fillRect(px-1,py-1,2,2); }
+    else if(e.t==="wolf"){ ctx.fillStyle="#868e96"; ctx.fillRect(px-2,py-1,4,2); }
+    if(e.sick>0&&e.t!=="human"&&e.t!=="tree"){ ctx.fillStyle="#b197fc"; ctx.fillRect(px-1,py-3,2,1); }
+  }
+  // 笔刷预览
+  if(mouseTile){
+    ctx.strokeStyle="#fff"; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.arc(mouseTile.x*s,mouseTile.y*s,brush*s,0,6.283); ctx.stroke(); ctx.setLineDash([]);
+  }
+}
+function showInspect(tx,ty){
+  const el=document.getElementById("inspectBody");
+  const i=idx(tx,ty);
+  const t=TNAME[terrain[i]];
+  let vilTxt="无", best=null,bd=1e9;
+  for(const v of aliveVils()){ const d=Math.hypot(v.x-tx,v.y-ty); if(d<bd){bd=d;best=v;} }
+  if(best&&bd<best.r)vilTxt=best.name+"（"+best.leader+"，"+best.culture+"，粮"+(best.food|0)+"）";
+  let cnt=0; for(const e of entities){ if((e.x|0)===tx&&(e.y|0)===ty)cnt++; }
+  el.innerHTML="地块 ("+tx+","+ty+")：<b>"+t+"</b> · 湿度"+moist[i]+" · 🔥"+fireArr[i]+"<br>归属："+vilTxt+"<br>该格生命："+cnt+" · 全图人口:"+entities.filter(e=>e.t==="human").length;
+}
+
+/* ============ 输入 ============ */
+function evTile(ev){
+  const r=canvas.getBoundingClientRect();
+  const x=Math.floor((ev.clientX-r.left)/r.width*W), y=Math.floor((ev.clientY-r.top)/r.height*H);
+  if(!inMap(x,y))return null; return {x,y};
+}
+let painting=false;
+canvas.addEventListener("mousedown",ev=>{ painting=true; const t=evTile(ev); if(t){mouseTile=t;applyTool(t.x,t.y);} });
+window.addEventListener("mouseup",()=>painting=false);
+canvas.addEventListener("mousemove",ev=>{ const t=evTile(ev); mouseTile=t; if(painting&&t)applyTool(t.x,t.y); if(tool==="inspect"&&t&&!painting)showInspect(t.x,t.y); });
+canvas.addEventListener("contextmenu",ev=>ev.preventDefault());
+document.querySelectorAll("[data-tool]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("[data-tool]").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); tool=b.dataset.tool;
+}));
+document.querySelectorAll("[data-brush]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("[data-brush]").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); brush=+b.dataset.brush;
+}));
+
+/* ============ 顶栏/存档 ============ */
+const btnPause=document.getElementById("btnPause");
+function setSpeed(s){ speed=s; paused=false; btnPause.textContent="⏸ 暂停";
+  for(const id of ["btnS1","btnS2","btnS4"])document.getElementById(id).classList.remove("active");
+  document.getElementById(s===1?"btnS1":s===2?"btnS2":"btnS4").classList.add("active");
+}
+document.getElementById("btnS1").onclick=()=>setSpeed(1);
+document.getElementById("btnS2").onclick=()=>setSpeed(2);
+document.getElementById("btnS4").onclick=()=>setSpeed(4);
+btnPause.onclick=()=>{ paused=!paused; btnPause.textContent=paused?"▶ 继续":"⏸ 暂停"; };
+document.getElementById("btnNew").onclick=()=>{ if(confirm("生成新世界？未保存的进度会丢失。"))genWorld(); };
+document.getElementById("btnClearLife").onclick=()=>{ entities=entities.filter(e=>e.t==="tree"); for(const v of villages)v.dead=true; dynasty=null; log("🧹 生命被抹除，只剩荒原。","bad"); };
+document.getElementById("btnShot").onclick=()=>{
+  const a=document.createElement("a"); a.download="worldbox-like-day"+day+".png"; a.href=canvas.toDataURL("image/png"); a.click();
+};
+function snapshot(){
+  return {W,H,terrain:Array.from(terrain),moist:Array.from(moist),fire:Array.from(fireArr),entities,villages,dynasty,wars,nextVilId,nextEntId,day,tick,seed};
+}
+function restore(s){
+  terrain=Uint8Array.from(s.terrain); moist=Uint8Array.from(s.moist); fireArr=Uint8Array.from(s.fire||new Array(N).fill(0));
+  entities=s.entities||[]; villages=s.villages||[]; dynasty=s.dynasty||null; wars=s.wars||{};
+  nextVilId=s.nextVilId||1; nextEntId=s.nextEntId||1; day=s.day||0; tick=s.tick||0; seed=s.seed||1;
+  terrainDirty=true; log("📂 存档已载入：D"+day+"，"+aliveVils().length+"村。","good");
+}
+document.getElementById("btnSave").onclick=()=>{ try{localStorage.setItem(SAVE_KEY,JSON.stringify(snapshot()));log("💾 已存档到浏览器（D"+day+"）。","good");}catch(e){alert("存档失败："+e.message);} };
+document.getElementById("btnLoad").onclick=()=>{ const raw=localStorage.getItem(SAVE_KEY); if(!raw){alert("没有本地存档");return;} try{restore(JSON.parse(raw));}catch(e){alert("读档失败："+e.message);} };
+document.getElementById("btnExport").onclick=()=>{
+  const blob=new Blob([JSON.stringify(snapshot())],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="worldbox-like-save-day"+day+".json"; a.click();
+};
+document.getElementById("btnImport").onclick=()=>document.getElementById("fileImport").click();
+document.getElementById("fileImport").addEventListener("change",ev=>{
+  const f=ev.target.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=()=>{ try{restore(JSON.parse(r.result));}catch(e){alert("导入失败："+e.message);} };
+  r.readAsText(f); ev.target.value="";
+});
+
+/* ============ 主循环 ============ */
+let lastT=performance.now(), fpsAcc=0, fpsN=0, fpsT=0;
+function frame(now){
+  requestAnimationFrame(frame);
+  const dt=Math.min(100,now-lastT); lastT=now;
+  fpsAcc+=1000/Math.max(1,dt); fpsN++;
+  if(now-fpsT>500){
+    document.getElementById("stFps").textContent=Math.round(fpsAcc/Math.max(1,fpsN));
+    fpsAcc=0;fpsN=0;fpsT=now;
+    const humans=entities.filter(e=>e.t==="human").length;
+    const ani=entities.filter(e=>e.t!=="human"&&e.t!=="tree").length;
+    document.getElementById("stDay").textContent=day;
+    document.getElementById("stPop").textContent=humans;
+    document.getElementById("stVil").textContent=aliveVils().length;
+    document.getElementById("stAni").textContent=ani;
+    document.getElementById("stDyn").textContent=dynasty?dynasty.name+"·"+dynasty.era:"无";
+  }
+  if(!paused){ const steps=speed*2; for(let k=0;k<steps;k++)simTick(); }
+  draw();
+}
+
+/* ============ 启动 ============ */
+(function init(){
+  const raw=localStorage.getItem(SAVE_KEY);
+  if(raw){ try{ restore(JSON.parse(raw)); log("👋 欢迎回来，继续上次的世界。","good"); }catch(e){ genWorld(); } }
+  else genWorld();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

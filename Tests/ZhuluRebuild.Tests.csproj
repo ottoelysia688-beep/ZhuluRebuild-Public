@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ZhuluRebuild Domain 层单元测试（L2 自测：纯逻辑边界）
+    ═══════════════════════════════════════════════════
+    零 NuGet 依赖的控制台测试运行器：离线可用，不依赖 dotnet test / VSTest。
+    运行方式（项目根目录）：
+      dotnet run [参数 project] Tests （即 dotnet run 加 project 参数指向 Tests 目录）
+    退出码 0 = 全部通过；非 0 = 有失败。
+    注意：本工程位于 Tests/，NML 只编译 Scripts/*.cs，不会触碰此目录。
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>ZhuluRebuild.Tests</AssemblyName>
+    <RootNamespace>ZhuluRebuild.Tests</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>$(NoWarn);NU1702</NoWarn>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZhuluRebuild.csproj" NoWarn="NU1702" />
+    <!-- net48主工程在net10运行时上执行(桌面CLR无法加载游戏DIM接口,net10可以) -->
+  </ItemGroup>
+
+  <!-- 排除 IL 逆向工具子工程（独立以 Tests/ilscan 为项目目录运行） -->
+  <ItemGroup>
+    <Compile Remove="ilscan\**" />
+    <None Remove="ilscan\**" />
+    <Content Remove="ilscan\**" />
+  </ItemGroup>
+
+  <!-- 测试运行时需要把游戏 DLL 拷贝到输出目录（主工程 Private=False 不拷贝） -->
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\worldbox_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\worldbox_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\worldbox_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NeoModLoader">
+      <HintPath>..\..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

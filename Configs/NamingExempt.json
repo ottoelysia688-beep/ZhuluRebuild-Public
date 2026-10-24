@@ -1,0 +1,12 @@
+﻿{
+  "_comment": "批次13：外部mod命名豁免名单——携带下列任一特质的单位不参与逐鹿命名（保留原mod名称）。支持前缀匹配（编号扫描）。",
+  "enabled": true,
+  "exempt_traits": [
+    "XjRealm", "XjCraft", "XjZz", "XjYiDuiYing",
+    "Tu00", "LingHui", "WeiGe",
+    "XuLie",
+    "RankTalentst", "TheProgenitoroftheBloodline", "Ancestry", "PureBloodline", "ThinBloodline",
+    "xn_",
+    "xiuxian.standalone"
+  ]
+}

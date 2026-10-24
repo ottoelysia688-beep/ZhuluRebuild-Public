@@ -1,0 +1,312 @@
+[
+  {
+    "id": "zi_clan_aid", "category": "governance", "categoryTitle": "族政",
+    "officeId": "prime_minister", "officeTitle": "家宰", "title": "宗族互助",
+    "summary": "宗族子弟守望相助，共渡时艰",
+    "buff": "城市忠诚度 +10", "tradeoff": "金币税收效率 -5%",
+    "channel": "city_loyalty_bonus", "baseValue": 10.0,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.95,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": ""
+  },
+  {
+    "id": "zi_all_soldiers", "category": "military", "categoryTitle": "族政",
+    "officeId": "prime_minister", "officeTitle": "家宰", "title": "全民皆兵·中",
+    "summary": "举族皆战，老幼皆守，以弱抗强",
+    "buff": "军队兵员上限 +20%", "tradeoff": "城市人口上限 -10%",
+    "channel": "military_readiness", "baseValue": 1.20,
+    "tradeoffChannel": "population_growth_speed", "tradeoffValue": 0.90,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": ""
+  },
+  {
+    "id": "zi_all_soldiers_light", "category": "military", "categoryTitle": "族政",
+    "officeId": "prime_minister", "officeTitle": "家宰", "title": "全民皆兵·轻",
+    "summary": "农闲操练，战时集结",
+    "buff": "军队兵员上限 +10%", "tradeoff": "城市人口上限 -3%",
+    "channel": "military_readiness", "baseValue": 1.10,
+    "tradeoffChannel": "population_growth_speed", "tradeoffValue": 0.97,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": ""
+  },
+  {
+    "id": "zi_all_soldiers_heavy", "category": "military", "categoryTitle": "族政",
+    "officeId": "prime_minister", "officeTitle": "家宰", "title": "全民皆兵·重",
+    "summary": "尽发丁壮，倾国为战",
+    "buff": "军队兵员上限 +35%", "tradeoff": "城市人口上限 -20%",
+    "channel": "military_readiness", "baseValue": 1.35,
+    "tradeoffChannel": "population_growth_speed", "tradeoffValue": 0.80,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": ""
+  },
+  {
+    "id": "zlr_zongmiao", "category": "governance", "categoryTitle": "礼制",
+    "officeId": "prime_minister", "officeTitle": "上大夫", "title": "宗庙血食",
+    "summary": "立宗庙，奉血食，追远慎终，礼教以兴",
+    "buff": "礼治 +2", "tradeoff": "金币税收效率 -5%，城市忠诚 -2（祭祀靡费）",
+    "channel": "gold_income_multiplier", "baseValue": 0.95,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": -2.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "bo"
+  },
+  {
+    "id": "zlr_mingtang", "category": "governance", "categoryTitle": "礼制",
+    "officeId": "prime_minister", "officeTitle": "上大夫", "title": "明堂修礼",
+    "summary": "修明堂，行朝聘，序爵齿，明贵贱",
+    "buff": "礼治 +2，城市忠诚 +8", "tradeoff": "金币税收效率 -3%（营建耗财）",
+    "channel": "city_loyalty_bonus", "baseValue": 8.0,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.97,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "bo"
+  },
+  {
+    "id": "bo_minister_gov", "category": "governance", "categoryTitle": "邦政",
+    "officeId": "prime_minister", "officeTitle": "上大夫", "title": "大夫理政",
+    "summary": "大夫总揽政务，井井有条，赋税充盈",
+    "buff": "金币税收效率 +10%", "tradeoff": "城市忠诚度 -5",
+    "channel": "gold_income_multiplier", "baseValue": 1.10,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": -5.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "bo"
+  },
+  {
+    "id": "bo_militia", "category": "military", "categoryTitle": "邦政",
+    "officeId": "military", "officeTitle": "司马", "title": "乡兵制",
+    "summary": "征召乡勇，农闲操练，守卫邦土",
+    "buff": "军队兵员上限 +25%", "tradeoff": "金币税收效率 -10%",
+    "channel": "military_readiness", "baseValue": 1.25,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.90,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "bo"
+  },
+  {
+    "id": "bo_recruit_talent", "category": "economy", "categoryTitle": "邦政",
+    "officeId": "revenue", "officeTitle": "司徒", "title": "礼贤下士",
+    "summary": "广纳贤才，招徕流民，充实邦国人口",
+    "buff": "城市人口上限 +15%", "tradeoff": "军队兵员上限 -10%",
+    "channel": "population_growth_speed", "baseValue": 1.15,
+    "tradeoffChannel": "military_readiness", "tradeoffValue": 0.90,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "bo"
+  },
+  {
+    "id": "gov_central", "category": "governance", "categoryTitle": "朝政政策",
+    "officeId": "prime_minister", "officeTitle": "丞相", "title": "中央集权",
+    "summary": "强干弱枝，巩固朝廷权威，削弱地方割据势力",
+    "buff": "城市忠诚度 +20", "tradeoff": "军队兵员上限 -10%",
+    "channel": "city_loyalty_bonus", "baseValue": 20.0,
+    "tradeoffChannel": "military_readiness", "tradeoffValue": 0.90,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "gov_feudal", "category": "governance", "categoryTitle": "朝政政策",
+    "officeId": "prime_minister", "officeTitle": "丞相", "title": "郡国并行",
+    "summary": "分封宗室功臣，犬牙相制，拱卫京师朝堂",
+    "buff": "城市忠诚度 +15", "tradeoff": "金币税收效率 -10%",
+    "channel": "city_loyalty_bonus", "baseValue": 15.0,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.90,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "gov_purge", "category": "governance", "categoryTitle": "朝政政策",
+    "officeId": "prime_minister", "officeTitle": "丞相", "title": "朝堂整肃",
+    "summary": "严加考课百官，整顿朝纲，肃清吏治",
+    "buff": "金币税收效率 +15%", "tradeoff": "城市忠诚度 -10",
+    "channel": "gold_income_multiplier", "baseValue": 1.15,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": -10.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "gov_taoist", "category": "governance", "categoryTitle": "朝政政策",
+    "officeId": "prime_minister", "officeTitle": "丞相", "title": "无为而治",
+    "summary": "与民休息，宽刑省罚，顺应自然无为",
+    "buff": "城市人口上限 +30%", "tradeoff": "军队兵员上限 -15%",
+    "channel": "population_growth_speed", "baseValue": 1.30,
+    "tradeoffChannel": "military_readiness", "tradeoffValue": 0.85,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "mil_fubing", "category": "military", "categoryTitle": "军事政策",
+    "officeId": "military", "officeTitle": "兵部尚书", "title": "府兵制",
+    "summary": "寓兵于农，战时为兵，平时为民耕种",
+    "buff": "军队兵员上限 +30%", "tradeoff": "金币税收效率 -10%",
+    "channel": "military_readiness", "baseValue": 1.30,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.90,
+    "upkeepPct": 0.015,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "mil_mercenary", "category": "military", "categoryTitle": "军事政策",
+    "officeId": "military", "officeTitle": "兵部尚书", "title": "募兵制",
+    "summary": "招募职业精兵，重赏勇士，专事对外征伐",
+    "buff": "军队兵员上限 +20%", "tradeoff": "城市忠诚度 -10 且持续耗军饷（岁入 -2%/年）",
+    "channel": "military_readiness", "baseValue": 1.20,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": -10.0,
+    "upkeepPct": 0.02,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "mil_civilian", "category": "military", "categoryTitle": "军事政策",
+    "officeId": "military", "officeTitle": "兵部尚书", "title": "重文轻武",
+    "summary": "抑将重文，交出兵权，防止藩镇割据自立",
+    "buff": "城市忠诚度 +25", "tradeoff": "军队兵员上限 -20%",
+    "channel": "city_loyalty_bonus", "baseValue": 25.0,
+    "tradeoffChannel": "military_readiness", "tradeoffValue": 0.80,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "gong"
+  },
+  {
+    "id": "mil_elite", "category": "military", "categoryTitle": "军事政策",
+    "officeId": "military", "officeTitle": "兵部尚书", "title": "精兵简政",
+    "summary": "裁撤冗兵，精选健儿，坚城固守",
+    "buff": "建筑耐久 +25%", "tradeoff": "军队兵员上限 -10% 且持续军饷（岁入 -1%/年）",
+    "channel": "building_health_multiplier", "baseValue": 1.25,
+    "tradeoffChannel": "military_readiness", "tradeoffValue": 0.90,
+    "upkeepPct": 0.01,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "eco_salt_iron", "category": "economy", "categoryTitle": "经济政策",
+    "officeId": "revenue", "officeTitle": "户部尚书", "title": "盐铁专卖",
+    "summary": "国家垄断盐铁手工业与矿产商品贸易",
+    "buff": "金币税收效率 +30%", "tradeoff": "城市忠诚度 -5",
+    "channel": "gold_income_multiplier", "baseValue": 1.30,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": -5.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "eco_rest", "category": "economy", "categoryTitle": "经济政策",
+    "officeId": "revenue", "officeTitle": "户部尚书", "title": "与民休息",
+    "summary": "薄敛轻徭，不夺农时，充实民间粮仓",
+    "buff": "城市忠诚度 +15", "tradeoff": "金币税收效率 -20%",
+    "channel": "city_loyalty_bonus", "baseValue": 15.0,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.80,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "eco_land", "category": "economy", "categoryTitle": "经济政策",
+    "officeId": "revenue", "officeTitle": "户部尚书", "title": "均田制",
+    "summary": "土地官办再分配，防止地方豪强兼并土地",
+    "buff": "城市人口上限 +25%", "tradeoff": "金币税收效率 -15%",
+    "channel": "population_growth_speed", "baseValue": 1.25,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.85,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "eco_head_tax", "category": "economy", "categoryTitle": "经济政策",
+    "officeId": "revenue", "officeTitle": "户部尚书", "title": "人均制税·中",
+    "summary": "按人口头钱征税，快速充实中央国库",
+    "buff": "金币税收效率 +40%", "tradeoff": "城市忠诚度 -10",
+    "channel": "gold_income_multiplier", "baseValue": 1.40,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": -10.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "gong"
+  },
+  {
+    "id": "eco_head_tax_light", "category": "economy", "categoryTitle": "经济政策",
+    "officeId": "revenue", "officeTitle": "户部尚书", "title": "人均制税·轻",
+    "summary": "轻征头钱，百姓尚可承受",
+    "buff": "金币税收效率 +20%", "tradeoff": "城市忠诚度 -3",
+    "channel": "gold_income_multiplier", "baseValue": 1.20,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": -3.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "gong"
+  },
+  {
+    "id": "eco_head_tax_heavy", "category": "economy", "categoryTitle": "经济政策",
+    "officeId": "revenue", "officeTitle": "户部尚书", "title": "人均制税·重",
+    "summary": "重征头钱，竭泽而渔以充国库",
+    "buff": "金币税收效率 +60%", "tradeoff": "城市忠诚度 -18",
+    "channel": "gold_income_multiplier", "baseValue": 1.60,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": -18.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "gong"
+  },
+  {
+    "id": "soc_peace", "category": "social", "categoryTitle": "社会政策",
+    "officeId": "rites", "officeTitle": "礼部尚书", "title": "修好周边",
+    "summary": "怀柔远人，厚往薄来，修睦周边列国",
+    "buff": "列国外交好感度 +30", "tradeoff": "军队兵员上限 -10%",
+    "channel": "diplomatic_opinion_bonus", "baseValue": 30.0,
+    "tradeoffChannel": "military_readiness", "tradeoffValue": 0.90,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "soc_hegemony", "category": "social", "categoryTitle": "社会政策",
+    "officeId": "rites", "officeTitle": "礼部尚书", "title": "尊王攘夷",
+    "summary": "奉天子以令诸侯，号令天下，抵御异族侵扰",
+    "buff": "列国外交好感度 +20", "tradeoff": "金币税收效率 -10%",
+    "channel": "diplomatic_opinion_bonus", "baseValue": 20.0,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.90,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "soc_isolation", "category": "social", "categoryTitle": "社会政策",
+    "officeId": "rites", "officeTitle": "礼部尚书", "title": "闭关锁国",
+    "summary": "封锁关隘，严禁边贸，维持传统防守",
+    "buff": "建筑耐久 +25%", "tradeoff": "列国外交好感度 -15",
+    "channel": "building_health_multiplier", "baseValue": 1.25,
+    "tradeoffChannel": "diplomatic_opinion_bonus", "tradeoffValue": -15.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "soc_ritual", "category": "social", "categoryTitle": "社会政策",
+    "officeId": "rites", "officeTitle": "礼部尚书", "title": "礼乐教化",
+    "summary": "修明礼乐，崇尚圣贤，教化天下百姓",
+    "buff": "城市人口上限 +20%", "tradeoff": "军队兵员上限 -10%",
+    "channel": "population_growth_speed", "baseValue": 1.20,
+    "tradeoffChannel": "military_readiness", "tradeoffValue": 0.90,
+    "upkeepPct": 0.0,
+    "requiresMandate": false, "mandateThreshold": 0, "minTier": "hou"
+  },
+  {
+    "id": "mand_fengshan", "category": "mandate", "categoryTitle": "天命专属",
+    "officeId": "prime_minister", "officeTitle": "丞相", "title": "封禅泰山",
+    "summary": "登封泰山，告成功于天地，彰显天命正统",
+    "buff": "社稷稳定度 +15 且城市忠诚 +10", "tradeoff": "金币税收效率 -15%",
+    "channel": "city_loyalty_bonus", "baseValue": 10.0,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.85,
+    "upkeepPct": 0.0,
+    "requiresMandate": true, "mandateThreshold": 70, "minTier": ""
+  },
+  {
+    "id": "mand_zhengshuo", "category": "mandate", "categoryTitle": "天命专属",
+    "officeId": "prime_minister", "officeTitle": "丞相", "title": "颁布正朔",
+    "summary": "颁正朔于天下，令列国奉我朝历法，确立宗主之尊",
+    "buff": "列国外交好感 +40", "tradeoff": "军队兵员上限 -15%",
+    "channel": "diplomatic_opinion_bonus", "baseValue": 40.0,
+    "tradeoffChannel": "military_readiness", "tradeoffValue": 0.85,
+    "upkeepPct": 0.0,
+    "requiresMandate": true, "mandateThreshold": 50, "minTier": ""
+  },
+  {
+    "id": "mand_jitian", "category": "mandate", "categoryTitle": "天命专属",
+    "officeId": "prime_minister", "officeTitle": "丞相", "title": "祭天大典",
+    "summary": "举国祭天，大赦天下，万民同庆",
+    "buff": "城市忠诚度 +25", "tradeoff": "金币税收效率 -20%",
+    "channel": "city_loyalty_bonus", "baseValue": 25.0,
+    "tradeoffChannel": "gold_income_multiplier", "tradeoffValue": 0.80,
+    "upkeepPct": 0.0,
+    "requiresMandate": true, "mandateThreshold": 60, "minTier": ""
+  },
+  {
+    "id": "mand_zuiji", "category": "mandate", "categoryTitle": "天命专属",
+    "officeId": "prime_minister", "officeTitle": "丞相", "title": "罪己诏",
+    "summary": "天子下诏罪己，引咎自责，以安天下人心",
+    "buff": "稳定度 +20 且城市忠诚 +10", "tradeoff": "天命值 -5（一次性）",
+    "channel": "city_loyalty_bonus", "baseValue": 0.0,
+    "tradeoffChannel": "city_loyalty_bonus", "tradeoffValue": 0.0,
+    "upkeepPct": 0.0,
+    "requiresMandate": true, "mandateThreshold": -1, "minTier": ""
+  }
+]

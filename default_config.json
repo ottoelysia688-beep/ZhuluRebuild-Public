@@ -1,0 +1,10 @@
+{
+    "SplitEvents": [
+        {
+            "Id": "SplitEventsEnabled",
+            "Type": "SWITCH",
+            "BoolVal": false,
+            "Callback": "ZhuluRebuild.Core.ZhuluModConfig:SetSplitEventsEnabled"
+        }
+    ]
+}

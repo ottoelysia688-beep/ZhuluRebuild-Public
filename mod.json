@@ -1,0 +1,12 @@
+{
+  "name": "逐鹿 ZhuluRebuild",
+  "author": "Zhulu Team",
+  "GUID": "ZHULU_TEAM_ZHULUREBUILD",
+  "version": "1.3.0",
+  "description": "[h2]逐鹿 ZhuluRebuild[/h2]\n东方王朝政治模拟 × 游牧双体系大型玩法重构 Mod。架空古代政治朝政模拟，覆盖 15 个子系统。\n\n[h3]核心玩法[/h3]\n[b]五等爵位制 + 天命体系[/b]：受命于天、天命庇佑\n[b]官制 / 科举 / 党争[/b]：官员任命、科举取士、朝堂党争与派系演化\n[b]谥法与中文命名[/b]：帝王谥号、人物地名中文名生成\n[b]游牧双体系[/b]：六级草原勋爵 + 长生天眷，与东方体系并行不冲突\n[b]家族谱牒 / 继承改朝 / 附庸宣称 / 战争网关[/b] 等 15 个子系统\n[b]全面中文化[/b]：界面、图标与本地化资源（GameResources + Locales）\n\n[h3]AI 史官（可选功能）[/h3]\n填入大模型 API Key 后，可生成皇帝盖棺长评、实录野史、断代史、帝王本纪。\n[list]\n[*][b]不接入也能玩[/b]：全部玩法不依赖大模型，走本地模板\n[*][b]隐私[/b]：API Key 只保存在你自己电脑的 .runtime/llm.json，Mod 不上传任何数据\n[/list]\n\n[h3]运行要求[/h3]\n[list]\n[*]WorldBox v0.51.2 (build 549)\n[*]NeoModLoader 模组加载器（创意工坊可订阅）\n[*]本 Mod 以源码模式分发，由 NeoModLoader 在本地编译\n[/list]\n\n[h3]AI 内容披露[/h3]\n本 Mod 的「AI 史官」功能调用第三方大模型 API 生成历史文本，生成内容可能存在事实性偏差，请勿作为史实参考。\nMod 的玩法框架、代码与美术资源均由 Zhulu Team 人工编写。",
+  "iconPath": "icon.png",
+  "targetGameBuild": 549,
+  "Dependencies": [],
+  "OptionalDependencies": [],
+  "IncompatibleWith": []
+}

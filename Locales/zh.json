@@ -1,0 +1,23 @@
+﻿{
+  "zl_world_overview": "天下总览",
+  "zl_world_overview_description": "查看各国国势、官制、政策与邦交",
+  "zl_world_overview_window": "天下总览 · 政治格局",
+  "zl_world_wars": "天下战争",
+  "zl_world_wars_description": "查看战争、厌战、求和意愿与结算预测",
+  "zl_world_wars_window": "天下战争 · 战况观察",
+  "zl_world_chronicle": "天下史册",
+  "zl_world_chronicle_description": "查看天命、天眷、兵戈、邦交、内政与人事",
+  "zl_world_chronicle_window": "天下史册 · 纪事长卷",
+  "zl_mandate": "天命 / 天眷",
+  "zl_mandate_description": "切换查看东方天命与游牧长生天眷",
+  "zl_mandate_window": "天命 · 天眷编年",
+  "zl_civilization": "种族体制",
+  "zl_civilization_description": "设置其他智慧种族未来新国家采用东方或游牧体制",
+  "zl_civilization_window": "种族体制",
+  "zl_manual": "玩法速览",
+  "zl_manual_description": "查看东方与游牧双体系玩法说明",
+  "zl_manual_window": "玩法速览",
+  "zl_settings": "逐鹿设置",
+  "zl_settings_description": "配置逐鹿功能、显示和模拟节奏",
+  "zl_settings_window": "逐鹿设置 · 控制面板"
+}

@@ -1,0 +1,84 @@
+{
+  "traits": [
+    {
+      "id": "zlr_benevolent_ruler",
+      "name": "仁君",
+      "description": "治国有方，百姓安乐",
+      "positive": true,
+      "stats": { "diplomacy": 5, "stewardship": 3 },
+      "condition": "king_stability_high"
+    },
+    {
+      "id": "zlr_wise_minister",
+      "name": "贤相",
+      "description": "才德兼备，辅政有方",
+      "positive": true,
+      "stats": { "stewardship": 8, "intelligence": 5 },
+      "condition": "minister_score_high"
+    },
+    {
+      "id": "zlr_loyal_subject",
+      "name": "忠臣",
+      "description": "忠心耿耿，矢志不渝",
+      "positive": true,
+      "stats": { "diplomacy": 3, "stewardship": 3 },
+      "condition": "official_low_corruption"
+    },
+    {
+      "id": "zlr_genius",
+      "name": "天纵奇才",
+      "description": "天赋异禀，文武全才",
+      "positive": true,
+      "stats": { "intelligence": 3, "warfare": 3, "diplomacy": 3, "stewardship": 3 },
+      "condition": "total_stats_high"
+    },
+    {
+      "id": "zlr_dynasty_founder",
+      "name": "开国之主",
+      "description": "肇基立业，开创王朝",
+      "positive": true,
+      "stats": { "warfare": 10, "stewardship": 5, "max_age": 15 },
+      "condition": "dynasty_founder"
+    },
+    {
+      "id": "zlr_tyrant",
+      "name": "暴君",
+      "description": "穷兵黩武，民不聊生",
+      "positive": false,
+      "stats": { "warfare": 5, "diplomacy": -8 },
+      "condition": "king_stability_low"
+    },
+    {
+      "id": "zlr_corrupt_official",
+      "name": "贪官",
+      "description": "中饱私囊，贪得无厌",
+      "positive": false,
+      "stats": { "stewardship": -3 },
+      "condition": "official_high_corruption"
+    },
+    {
+      "id": "zlr_mediocre",
+      "name": "庸才",
+      "description": "尸位素餐，碌碌无为",
+      "positive": false,
+      "stats": { "intelligence": -3, "stewardship": -3, "diplomacy": -3, "warfare": -3 },
+      "condition": "official_score_low"
+    },
+    {
+      "id": "zlr_ambitious",
+      "name": "野心家",
+      "description": "心怀叵测，觊觎大位",
+      "positive": false,
+      "stats": { "intelligence": 5 },
+      "condition": "official_high_power"
+    },
+    {
+      "id": "zlr_foolish_ruler",
+      "name": "昏君",
+      "description": "荒淫无道，国库空虚",
+      "positive": false,
+      "stats": { "stewardship": -5, "intelligence": -3 },
+      "condition": "king_deficit_long"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "window_safety_width_ratio": 0.8,
+  "window_safety_height_ratio": 0.8,
+  "overview_left_panel_ratio": 0.55,
+  "overview_right_panel_ratio": 0.45,
+  "kingdom_tab_layout_mode": "adaptive",
+  "office_cards_per_row": 3,
+  "card_row_count": 2
+}
